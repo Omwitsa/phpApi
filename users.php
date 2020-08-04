@@ -1,23 +1,23 @@
 <?php
-	require_once 'db_connection.php';
-	//$name = $_POST['fname'];
-	$name = 2;
-	$sql = "SELECT * FROM `mdl_user` WHERE id = $name";
-	$result = $conn->query($sql);
-	if ($result->num_rows > 0) {
-		// output data of each row
-		while($row = $result->fetch_assoc()) {
-			$data[]=$row;
-		}
-		$response["success"] = 'success';
-		$response["message"] = 'Logged in successfull';
-		$response["data"] = $data;
+	require_once 'DBOperations.php';
+	$db_operation = new DBOperation();
+	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+		$data = json_decode(file_get_contents("php://input"));
 		
-		echo json_encode($response);
-	} else {
-		$response["success"] = 'failure';
-		$response["message"] = 'Sorry, Invalid username or password';
-		echo json_encode($response);
+		if(empty($data->operation)){
+			$response["result"] = "failure";
+		    $response["message"] = "Parameters should not be empty !";
+			echo json_encode($response);
+		}
+		else{
+			if($data->operation == 'login'){
+				$sql = "SELECT * FROM `mdl_user` WHERE id = $data->name";
+				$result = $db_operation->query($sql);
+				
+				echo $result;
+			}
+		}
 	}
-	$conn->close();
-?>
+	else if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+	  echo "You're in AmTech API"; 
+	}
