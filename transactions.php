@@ -13,27 +13,25 @@
 			if($data->operation == 'deposit'){
 				$sql = "INSERT INTO deposits (Supp_no, Amount, Pin, Fingerprint) VALUES('$data->sNo', '$data->amount', '$data->pin', '$data->fingerePrint')";
 				$result = $db_operation->insert($sql);
-				$data = json_decode($result);
-				$response["success"] = $data->success;
-				$response["message"] = 'Deposited successfully';
+				$response = json_decode($result);
+				$response->message = 'Deposited successfully';
 				
-				/*if($data->success == 'failure'){
-					$response["message"] = 'Sorry, An error occurred';
-				}*/
-				echo $result;
+				if($response->success == 'failure'){
+					$response->message = 'Sorry, An error occurred';
+				}
+				echo json_encode($response);
 			}
 			
 			if($data->operation == 'withdraw'){
 				$sql = "INSERT INTO withdraws (Supp_no, Amount, Pin, Fingerprint) VALUES('$data->sNo', '$data->amount', '$data->pin', '$data->fingerePrint')";
 				$result = $db_operation->insert($sql);
-				$data = json_decode($result);
-				$response["success"] = $data->success;
-				$response["message"] = 'Withdrawn successfully';
+				$response = json_decode($result);
+				$response->message = 'Withdrawn successfully';
 				
-				if($data->success == 'failure'){
-					$response["message"] = 'Sorry, An error occurred';
+				if($response->success == 'failure'){
+					$response->message = 'Sorry, An error occurred';
 				}
-				echo $result;
+				echo json_encode($response);
 			}
 		}
 	}
